@@ -7,13 +7,13 @@ our $VERSION = 'v0.1.0';
 use File::ShareDir ();
 
 use MooseX::Types -declare => [qw(
-    INIOptions
+  INIOptions
 )];
 use MooseX::Types::Moose qw( HashRef ArrayRef Str );
 
 use Moose::Util::TypeConstraints qw(
-    subtype
-    coerce
+  subtype
+  coerce
 );
 
 use namespace::autoclean;
