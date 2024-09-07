@@ -1,0 +1,7 @@
+runtime:
+  requires:
+    perl: '5.020000'
+
+develop:
+  requires:
+    Test::Pod::Coverage::TrustMe: 0
