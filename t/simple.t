@@ -1,5 +1,6 @@
-use strict;
+use v5.20;
 use warnings;
+use experimental qw(signatures postderef);
 
 use Test::More;
 use Dist::Zilla::Dist::Builder;

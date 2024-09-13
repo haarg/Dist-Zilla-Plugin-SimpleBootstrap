@@ -1,20 +1,23 @@
+use v5.20;
 package Dist::Zilla::Plugin::SimpleBootstrap;
 use Moose;
-use experimental qw(signatures);
+use experimental qw(signatures postderef);
 
 our $VERSION = 'v0.1.0';
 
 use File::ShareDir ();
 
-use MooseX::Types -declare => [qw(
-  INIOptions
-)];
-use MooseX::Types::Moose qw( HashRef ArrayRef Str );
+{
+  use MooseX::Types -declare => [qw(
+    INIOptions
+  )];
+  use MooseX::Types::Moose qw( HashRef ArrayRef Str );
 
-use Moose::Util::TypeConstraints qw(
-  subtype
-  coerce
-);
+  use Moose::Util::TypeConstraints qw(
+    subtype
+    coerce
+  );
+}
 
 use namespace::autoclean;
 
@@ -113,7 +116,7 @@ sub install_share ($self) {
 {
   package # hide
     Dist::Zilla::Role::_SimpleBootstrap;
-  use Moose::Role;
+  { use Moose::Role; }
   before _setup_default_plugins => sub ($self, @) {
     for my $plugin ($self->plugins->@*) {
       next
