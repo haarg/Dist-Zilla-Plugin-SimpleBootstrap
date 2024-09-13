@@ -10,32 +10,33 @@ jobs:
     outputs:
       versions: ${{ steps.perl-versions.outputs.perl-versions }}
     steps:
+      - uses: actions/checkout@v4
+      - name: Extract perl dependecy
+        id: prereqs
+        uses: perl-actions/get-prereqs@v1
+        with:
+          sources: prereqs.yml
       - id: perl-versions
         uses: perl-actions/perl-versions@v1
         with:
-          since-perl: v5.8
+          since-perl: ${{ steps.prereqs.outputs.perl }}
           with-devel: true
 
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Dist::Zilla
-        uses: perl-actions/install-with-cpm@v1
-        with:
-          install: Dist::Zilla
-      - name: Extract authordeps
+      - name: Extract Dist::Zilla dependencies
         id: authordeps
-        run: |
-          {
-            echo 'deps<<..END_DEPS'
-            dzil authordeps --missing
-            echo ..END_DEPS
-          } >> "$GITHUB_OUTPUT"
+        uses: perl-actions/get-prereqs@v1
+        with:
+          sources: dist.ini
+          phases: author
+          exclude: '^inc::'
       - name: Install authordeps
         uses: perl-actions/install-with-cpm@v1
         with:
-          install: ${{ steps.authordeps.outputs.deps }}
+          install: ${{ steps.authordeps.outputs.prereqs }}
       - name: Build
         id: build
         run: |
@@ -70,10 +71,6 @@ jobs:
       PERL_USE_UNSAFE_INC: 0
 
     steps:
-      - name: Install jq
-        run: |
-          apt-get update
-          apt-get install -y jq
       - name: Download build
         uses: actions/download-artifact@v4
         with:
@@ -86,12 +83,9 @@ jobs:
           echo "PERL_MM_OPT=INSTALL_BASE=$RUNNER_TEMP/perl5" >> "$GITHUB_ENV"
       - name: Extract configure dependecies
         id: configure
-        run: |
-          {
-            echo 'prereqs<<..END_DEPS'
-            jq -r '.prereqs.configure | [.requires, .recommends, .suggests] | to_entries[] | .value | select(. != null) | to_entries[] | "\(.key)~\(.value)"' < META.json
-            echo ..END_DEPS
-          } >> "$GITHUB_OUTPUT"
+        uses: perl-actions/get-prereqs@v1
+        with:
+          phases: configure
       - name: Install configure deps
         uses: perl-actions/install-with-cpm@v1
         with:
@@ -101,12 +95,10 @@ jobs:
         run: perl Makefile.PL
       - name: Extract dependecies
         id: prereqs
-        run: |
-          {
-            echo 'prereqs<<..END_DEPS'
-            jq -r '.prereqs | [ .build, .test, .runtime ] | to_entries[] | .value | select( . != null) | [.requires, .recommends, .suggests] | to_entries[] | .value | select( . != null) | to_entries[] | "\(.key)~\(.value)"' < MYMETA.json
-            echo ..END_DEPS
-          } >> "$GITHUB_OUTPUT"
+        uses: perl-actions/get-prereqs@v1
+        with:
+          phases: build test runtime
+          relationships: requires recommends suggests
       - name: Install deps
         uses: perl-actions/install-with-cpm@v1
         with:
@@ -128,10 +120,6 @@ jobs:
       AUTOMATED_TESTING: 1
 
     steps:
-      - name: Install jq
-        run: |
-          apt-get update
-          apt-get install -y jq
       - name: Download build
         uses: actions/download-artifact@v4
         with:
@@ -144,12 +132,9 @@ jobs:
           echo "PERL_MM_OPT=INSTALL_BASE=$RUNNER_TEMP/perl5" >> "$GITHUB_ENV"
       - name: Extract configure dependecies
         id: configure
-        run: |
-          {
-            echo 'prereqs<<..END_DEPS'
-            jq -r '.prereqs.configure | [.requires, .recommends, .suggests] | to_entries[] | .value | select(. != null) | to_entries[] | "\(.key)~\(.value)"' < META.json
-            echo ..END_DEPS
-          } >> "$GITHUB_OUTPUT"
+        uses: perl-actions/get-prereqs@v1
+        with:
+          phases: configure
       - name: Install configure deps
         uses: perl-actions/install-with-cpm@v1
         with:
@@ -159,12 +144,10 @@ jobs:
         run: perl Makefile.PL
       - name: Extract dependecies
         id: prereqs
-        run: |
-          {
-            echo 'prereqs<<..END_DEPS'
-            jq -r '.prereqs | [ .build, .test, .runtime, .develop ] | to_entries[] | .value | select( . != null) | [.requires, .recommends, .suggests] | to_entries[] | .value | select( . != null) | to_entries[] | "\(.key)~\(.value)"' < MYMETA.json
-            echo ..END_DEPS
-          } >> "$GITHUB_OUTPUT"
+        uses: perl-actions/get-prereqs@v1
+        with:
+          phases: build test runtime develop
+          relationships: requires recommends suggests
       - name: Install deps
         uses: perl-actions/install-with-cpm@v1
         with:
