@@ -153,7 +153,7 @@ jobs:
         with:
           sudo: false
           install: ${{ steps.prereqs.outputs.prereqs }}
-      - name: Run the tests
-        run: make test
       - name: Run the xt tests
-        run: prove -lr xt/*.t xt/author
+        run: prove -l xt
+      - name: Run the xt/author tests
+        run: prove -lr xt/author
