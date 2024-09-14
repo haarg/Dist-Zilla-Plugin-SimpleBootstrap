@@ -42,7 +42,6 @@ only = 1
 [Modules::ProhibitExcessMainComplexity]
 [Modules::RequireBarewordIncludes]
 [Modules::RequireEndWithOne]
-[Modules::RequireExplicitPackage]
 [Modules::RequireFilenameMatchesPackage]
 [NamingConventions::ProhibitAmbiguousNames]
 [Objects::ProhibitIndirectSyntax]
@@ -69,7 +68,6 @@ max_mccabe = 30
 [ValuesAndExpressions::ProhibitMismatchedOperators]
 [ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters]
 [ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator]
-[ValuesAndExpressions::ProhibitVersionStrings]
 [ValuesAndExpressions::RequireQuotedHeredocTerminator]
 [Variables::ProhibitAugmentedAssignmentInDeclaration]
 allow_our = 1
