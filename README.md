@@ -21,9 +21,8 @@ using modules directly from `lib/`.
 
 Additionally, it ensures that the modules are available during the build phase.
 [Dist::Zilla](https://metacpan.org/pod/Dist%3A%3AZilla) localizes [`@INC`](https://metacpan.org/pod/perlvar#INC) during the initial loading
-of modules, so modifications made at that time won't persist. This prevents
-[\[Bootstrap::lib\]](https://metacpan.org/pod/Dist%3A%3AZilla%3A%3APlugin%3A%3ABootstrap%3A%3Alib), from being used for
-[Pod::Weaver](https://metacpan.org/pod/Pod%3A%3AWeaver) plugins.
+of modules, so modifications made at that time wouldn't normally persist. This
+allows things like [Pod::Weaver](https://metacpan.org/pod/Pod%3A%3AWeaver) plugins to be used from the `lib/` directory.
 
 If a `share/` directory exists, it will be set as the
 [share directory](https://metacpan.org/pod/File%3A%3AShareDir#dist_dir) for the distribution.
@@ -49,6 +48,19 @@ If a `share/` directory exists, it will be set as the
     ```
     module_share = My::Module = share
     ```
+
+# KNOWN ISSUES
+
+- This module will not work well when used with [Test::DZil](https://metacpan.org/pod/Test%3A%3ADZil).
+
+# SEE ALSO
+
+- [\[Bootstrap::lib\]](https://metacpan.org/pod/Dist%3A%3AZilla%3A%3APlugin%3A%3ABootstrap%3A%3Alib), a significantly
+more complex plugin, which doesn't solve the problem of `@INC` being localized.
+Also does not include handling for share directories.
+- [\[lib\]](https://metacpan.org/pod/Dist%3A%3AZilla%3A%3APlugin%3A%3Alib), a simple plugin, but which doesn't
+solve the problem of `@INC` being localized. Also does not include handling for
+share directories.
 
 # BUGS
 
