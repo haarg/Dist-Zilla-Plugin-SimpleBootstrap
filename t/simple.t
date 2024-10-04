@@ -7,6 +7,9 @@ use Dist::Zilla::Dist::Builder;
 use File::ShareDir ();
 use Path::Tiny;
 
+# this is a horrible hack to work around Test::DZil localizing @INC.
+# In normal use, it doesn't matter because nobody will be using this plugin in
+# their tests.
 my @out_INC;
 BEGIN {
   my $meta = Dist::Zilla::Dist::Builder->meta;
