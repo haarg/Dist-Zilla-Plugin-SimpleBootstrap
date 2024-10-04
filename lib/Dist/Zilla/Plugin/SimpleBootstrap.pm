@@ -3,7 +3,7 @@ package Dist::Zilla::Plugin::SimpleBootstrap;
 use Moose;
 use experimental qw(signatures postderef);
 
-our $VERSION = 'v0.1.0';
+our $VERSION = 'v0.1.1';
 
 use File::ShareDir ();
 

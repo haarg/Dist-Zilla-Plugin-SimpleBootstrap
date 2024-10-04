@@ -16,15 +16,24 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "MIN_PERL_VERSION" => "5.020000",
   "NAME" => "Dist::Zilla::Plugin::SimpleBootstrap",
-  "PREREQ_PM" => {},
+  "PREREQ_PM" => {
+    "Dist::Zilla" => "6.000",
+    "Moose" => "2.2000",
+    "MooseX::Types" => 0,
+    "MooseX::Types::Moose" => 0,
+    "Path::Tiny" => 0,
+    "experimental" => 0,
+    "namespace::autoclean" => 0
+  },
   "TEST_REQUIRES" => {
     "ExtUtils::MakeMaker" => 0,
+    "File::ShareDir" => 0,
     "File::Spec" => 0,
     "IO::Handle" => 0,
     "IPC::Open3" => 0,
-    "Test::More" => 0
+    "Test::More" => "0.88"
   },
-  "VERSION" => "v0.1.0",
+  "VERSION" => "v0.1.1",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -32,11 +41,19 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
+  "Dist::Zilla" => "6.000",
   "ExtUtils::MakeMaker" => 0,
+  "File::ShareDir" => 0,
   "File::Spec" => 0,
   "IO::Handle" => 0,
   "IPC::Open3" => 0,
-  "Test::More" => 0
+  "Moose" => "2.2000",
+  "MooseX::Types" => 0,
+  "MooseX::Types::Moose" => 0,
+  "Path::Tiny" => 0,
+  "Test::More" => "0.88",
+  "experimental" => 0,
+  "namespace::autoclean" => 0
 );
 
 
